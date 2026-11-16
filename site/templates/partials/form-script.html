@@ -1,0 +1,37 @@
+<script>
+(function () {
+  var form = document.querySelector('form.form');
+  if (!form) return;
+
+  // Show an error passed back by the forms Worker (?error=...).
+  var messages = {
+    captcha: 'We could not confirm you are not a robot. Please try again.',
+    invalid: 'Some details were missing or not valid. Please check the form and try again.',
+    send: 'Sorry, something went wrong sending your details. Please try again later, or message us on Facebook.'
+  };
+  var err = new URLSearchParams(location.search).get('error');
+  if (err) {
+    var box = document.querySelector('.form-error');
+    box.textContent = messages[err] || messages.send;
+    box.hidden = false;
+  }
+
+  // Join form: only show (and require) the fields for the chosen join type.
+  var radios = form.querySelectorAll('input[name="join_type"]');
+  if (!radios.length) return;
+  function sync() {
+    var type = form.querySelector('input[name="join_type"]:checked').value;
+    document.querySelectorAll('[data-for]').forEach(function (el) {
+      var on = el.getAttribute('data-for') === type;
+      el.hidden = !on;
+      // Disabled inputs aren't submitted, so the other type's fields arrive empty.
+      el.querySelectorAll('input').forEach(function (i) { i.disabled = !on; });
+    });
+    form.querySelector('[name="adults_name"]').required = type === 'Adult Volunteer';
+    form.querySelector('[name="young_persons_name"]').required = type === 'Young Person';
+    form.querySelector('[name="parent_name"]').required = type === 'Young Person';
+  }
+  radios.forEach(function (r) { r.addEventListener('change', sync); });
+  sync();
+})();
+</script>

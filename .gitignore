@@ -1,0 +1,12 @@
+# Zola output and image cache
+site/public/
+site/static/processed_images/
+
+# Worker
+worker/node_modules/
+worker/.wrangler/
+worker/.dev.vars
+
+# Python
+.venv/
+__pycache__/

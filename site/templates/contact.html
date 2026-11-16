@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block head %}<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>{% endblock head %}
+{% block page_header %}{{<page_header title={section.title} />}}{% endblock page_header %}
+{% block content %}
+<div class="with-sidebar">
+  <div>
+    <div class="prose">{{ section.content | safe }}</div>
+
+    <div class="form-error" role="alert" hidden></div>
+
+    <form class="form" id="contact-form" method="post" action="{{ config.extra.forms_endpoint }}/contact">
+      <div class="row">
+        <label>First name <span class="req">(required)</span>
+          <input name="first_name" autocomplete="given-name" maxlength="100" required></label>
+        <label>Surname <span class="req">(required)</span>
+          <input name="surname" autocomplete="family-name" maxlength="100" required></label>
+      </div>
+      <div class="row">
+        <label>Email address <span class="req">(required)</span>
+          <input type="email" name="email_address" autocomplete="email" maxlength="200" required></label>
+        <label>Telephone number
+          <input type="tel" name="telephone_number" autocomplete="tel" maxlength="30"></label>
+      </div>
+      <div class="row">
+        <label>What is it about? <span class="req">(required)</span>
+          <select name="enquiry_type" required>
+            <option value="">Please select</option>
+            <option>General enquiry</option>
+            <option>Joining enquiry</option>
+            <option>Volunteering</option>
+            <option>Feedback</option>
+          </select></label>
+        <label>Which section?
+          <select name="section">
+            <option value="">Not sure / not applicable</option>
+            {% for s in config.extra.sections[:4] %}<option>{{ s.name }}</option>{% endfor %}
+          </select></label>
+      </div>
+      <label>Message <span class="req">(required)</span>
+        <textarea name="message" rows="7" maxlength="5000" required></textarea></label>
+
+      <label class="hp" aria-hidden="true">Leave this empty <input name="website" tabindex="-1" autocomplete="off"></label>
+
+      <div class="cf-turnstile" data-sitekey="{{ config.extra.turnstile_site_key }}"></div>
+      <button class="btn" type="submit">Send message</button>
+      <p class="small">Looking to join? The <a href="/join/">join form</a> puts you straight onto our waiting list.</p>
+    </form>
+  </div>
+  <aside class="sidebar">
+    <div class="panel">
+      <h2>Find us</h2>
+      <address>{{ config.extra.address | join(sep="<br>") | safe }}</address>
+      {%- set lat = config.extra.map_lat %}{% set lon = config.extra.map_lon %}
+      <iframe class="map" title="Map showing our hall"
+        src="https://www.openstreetmap.org/export/embed.html?bbox={{ lon - 0.006 }}%2C{{ lat - 0.003 }}%2C{{ lon + 0.006 }}%2C{{ lat + 0.003 }}&amp;layer=mapnik&amp;marker={{ lat }}%2C{{ lon }}"
+        loading="lazy"></iframe>
+      <p><a href="https://www.openstreetmap.org/?mlat={{ lat }}&amp;mlon={{ lon }}#map=17/{{ lat }}/{{ lon }}">View a larger map</a></p>
+    </div>
+    <div class="panel">
+      <h2>Facebook</h2>
+      <p>We post updates on <a href="{{ config.extra.facebook }}">our Facebook page</a>.</p>
+    </div>
+  </aside>
+</div>
+{% endblock content %}
+{% block scripts %}{% include "partials/form-script.html" %}{% endblock scripts %}

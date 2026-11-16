@@ -1,0 +1,73 @@
+base_url = "https://www.maltbyscouts.org"
+title = "Maltby Mavericks | 5th Rotherham Scout Group"
+description = "5th Rotherham (Maltby) Scout Group: Squirrels, Beavers, Cubs and Scouts in Maltby, Rotherham."
+default_language = "en"
+
+compile_sass = true
+minify_html = true
+generate_feeds = true
+feed_filenames = ["atom.xml"]
+build_search_index = false
+
+taxonomies = [
+  { name = "news_tag", feed = false, paginate_by = 12 },
+]
+
+[markdown]
+smart_punctuation = true
+external_links_target_blank = true
+external_links_no_follow = false
+lazy_async_image = true
+
+[link_checker]
+# `zola check` checks external links too; the Scouts sites rate-limit, so only warn.
+external_level = "warn"
+internal_level = "error"
+
+[extra]
+group_name = "5th Rotherham (Maltby)"
+nickname = "Maltby Mavericks"
+charity_number = "ZD21762"
+address = ["Edward Dunn Memorial Hall", "Tickhill Road", "Maltby", "S66 7NQ"]
+map_lat = 53.42236
+map_lon = -1.20474
+facebook = "https://www.facebook.com/maltbyscouts"
+youtube = "https://www.youtube.com/channel/UCGXag2AV4pMDvYj_alvwKAg"
+district_url = "https://www.rotherhamscouts.org"
+county_url = "https://www.syscouts.org.uk"
+shop_url = "https://www.scout-and-guide-shop.co.uk/scout-shop-22"
+badges_url = "https://www.scouts.org.uk/information-for-parents/scout-badges/"
+strategy_url = "https://www.scouts.org.uk/about-us/strategy/"
+
+# Cloudflare Worker that receives the contact/join forms (see /worker).
+forms_endpoint = "https://forms.maltbyscouts.org"
+# Cloudflare Turnstile *site* key (public). The secret key lives only in the Worker.
+# 1x00000000000000000000AA is Cloudflare's always-passes test key; replace before go-live.
+turnstile_site_key = "1x00000000000000000000AA"
+
+menu = [
+  { name = "Home", url = "/" },
+  { name = "About Us", url = "/about-us/" },
+  { name = "News", url = "/news/" },
+  { name = "Join", url = "/join/" },
+  { name = "Contact", url = "/contact/" },
+  { name = "Parents", url = "/parents/" },
+  { name = "Youth Programme", url = "/youth-programme/", children = [
+    { name = "Squirrels – 4 to 6 yrs", url = "/youth-programme/squirrels/" },
+    { name = "Beavers – 6 to 8", url = "/youth-programme/beavers/" },
+    { name = "Cubs – 8 to 10½", url = "/youth-programme/cubs/" },
+    { name = "Scouts – 10½ to 14", url = "/youth-programme/scouts/" },
+    { name = "Explorers – 14 to 18", url = "https://resu.org.uk/" },
+    { name = "Young Leaders – 14 to 18", url = "/youth-programme/young-leaders/" },
+    { name = "Network – 18 to 25", url = "https://www.rotherhamscouts.org/join/network-2/" },
+  ] },
+]
+
+sections = [
+  { name = "Squirrels", ages = "4-6 years", class = "squirrels", icon = "/images/brand/age-icon-1.svg", url = "/youth-programme/squirrels/" },
+  { name = "Beavers", ages = "6-8 years", class = "beavers", icon = "/images/brand/age-icon-2.svg", url = "/youth-programme/beavers/" },
+  { name = "Cubs", ages = "8-10½ years", class = "cubs", icon = "/images/brand/age-icon-3.svg", url = "/youth-programme/cubs/" },
+  { name = "Scouts", ages = "10½-14 years", class = "scouts", icon = "/images/brand/age-icon-4.svg", url = "/youth-programme/scouts/" },
+  { name = "Explorers", ages = "14-18 years", class = "explorers", icon = "/images/brand/age-icon-5.svg", url = "https://resu.org.uk/" },
+  { name = "Network", ages = "18-25 years", class = "network", icon = "/images/brand/age-icon-6.svg", url = "https://www.rotherhamscouts.org/join/network-2/" },
+]

@@ -1,0 +1,36 @@
+name = "maltbyscouts-forms"
+main = "src/index.js"
+compatibility_date = "2026-11-01"
+
+# Serve on forms.<domain>. The domain must be a zone on the same Cloudflare account
+# (DNS can stay pointed at GitHub Pages for the website itself). Remove `routes` to use
+# the free *.workers.dev URL instead, and update `forms_endpoint` in site/config.toml.
+routes = [{ pattern = "forms.maltbyscouts.org", custom_domain = true }]
+
+[observability]
+enabled = true
+
+[[kv_namespaces]]
+binding = "COUNTER"
+# Create with: npx wrangler kv namespace create COUNTER   (then paste the id here)
+id = "REPLACE_WITH_KV_NAMESPACE_ID"
+
+[vars]
+SITE_URL = "https://www.maltbyscouts.org"
+# Comma-separated extra origins allowed to post (e.g. a local `zola serve`). Leave empty in production.
+EXTRA_ORIGINS = ""
+# Send-only address on our own domain (verified in Resend). No mailbox is needed behind it.
+FROM_ADDRESS = "Maltby Scouts website <forms@maltbyscouts.org>"
+# Contact form recipients (the leaders list).
+CONTACT_TO = "REPLACE_WITH_LEADERS_LIST"
+# Join form: machine-readable copy for the OSM import script.
+JOIN_SCRIPT_TO = "maltbywaiting@gmail.com"
+JOIN_SUBJECT = "New Join Enquiry"
+# Join form: optional human-readable copy for leaders (comma-separated, may be empty).
+JOIN_NOTIFY_TO = ""
+# First entry_id will be ENTRY_ID_START + 1. Set above the last id from the old site.
+ENTRY_ID_START = "1000"
+
+# Secrets (never commit these):
+#   npx wrangler secret put TURNSTILE_SECRET
+#   npx wrangler secret put RESEND_API_KEY

@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{% block page_header %}{{<page_header title={page.title} />}}{% endblock page_header %}
+{% block content %}
+<article class="prose">
+  {{ page.content | safe }}
+</article>
+{% endblock content %}

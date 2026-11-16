@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}{{ term.name }} news | {{ config.extra.nickname }}{% endblock title %}
+{% block page_header %}{{<page_header title={term.name} kicker="News" />}}{% endblock page_header %}
+{% block content %}
+{% set tags = get_taxonomy(kind="news_tag") %}
+<nav class="tag-filter" aria-label="Filter by section">
+  <a href="/news/">All</a>
+  {% for t in tags.items %}<a {% if t.name == term.name %}class="active" {% endif %}href="{{ t.permalink | safe }}">{{ t.name }}</a>{% endfor %}
+</nav>
+<div class="card-grid">
+  {% for p in paginator.pages %}{{<news_card p={p} />}}{% endfor %}
+</div>
+{{<pagination paginator={paginator} />}}
+{% endblock content %}

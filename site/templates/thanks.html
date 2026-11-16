@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block head %}<meta name="robots" content="noindex">{% endblock head %}
+{% block page_header %}{{<page_header title={page.title} />}}{% endblock page_header %}
+{% block content %}
+<div class="prose thanks">
+  {{ page.content | safe }}
+  <p><a class="btn" href="/">Back to the home page</a></p>
+</div>
+{% endblock content %}

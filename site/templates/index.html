@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% block body_class %}home{% endblock body_class %}
+{% block main %}
+<section class="hero">
+  {%- set hero = resize_image(path="images/brand/hero.jpg", width=1920, height=900, op="fill", format="webp", quality=72) %}
+  <img class="hero__bg" src="{{ hero.url }}" alt="" width="{{ hero.width }}" height="{{ hero.height }}" fetchpriority="high">
+  <div class="wrap hero__inner">
+    <h1>{{ section.extra.hero_title }}</h1>
+    <p>{{ section.extra.hero_text }}</p>
+    <p class="btn-row">
+      <a class="btn btn--white" href="/join/">Join today</a>
+      <a class="btn btn--ghost" href="/about-us/">Find out more</a>
+    </p>
+  </div>
+</section>
+
+<section class="welcome">
+  <div class="wrap welcome__grid">
+    <div class="prose">
+      {{ section.content | safe }}
+    </div>
+    <div class="welcome__media">
+      {{<thumb path="images/uploads/maltby-mavericks-logo.jpg" alt="Maltby Mavericks logo" w={491} h={529} />}}
+    </div>
+  </div>
+</section>
+
+<section class="ages">
+  <div class="wrap">
+    <h2>Aged 4 to 25?</h2>
+    <ul class="age-grid">
+      {% for s in config.extra.sections %}
+      <li><a class="age age--{{ s.class }}" href="{{ s.url }}">
+        <img src="{{ s.icon }}" alt="" width="64" height="64">
+        <strong>{{ s.name }}</strong><span>{{ s.ages }}</span>
+      </a></li>
+      {% endfor %}
+    </ul>
+  </div>
+</section>
+
+{% set news = get_section(path="news/_index.md") %}
+<section class="latest-news">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Latest news</h2>
+      <a href="/news/">View all news →</a>
+    </div>
+    <div class="card-grid">
+      {% for p in news.pages[:4] %}{{<news_card p={p} />}}{% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="join-band">
+  <div class="wrap">
+    <h2>Do more. Share more. Be more.</h2>
+    <p>Want to join the adventure? Scouting is skateboarding, climbing, kayaking, camping, sailing and much more.</p>
+    <a class="btn btn--white" href="/join/">Join today</a>
+  </div>
+</section>
+
+<section class="cta-pair">
+  <div class="wrap cta-pair__grid">
+    <a class="cta" href="{{ config.extra.shop_url }}">
+      <strong>Buy the latest official Scouts clothing &amp; equipment</strong>
+      <span>Go to the shop →</span>
+    </a>
+    <a class="cta" href="{{ config.extra.badges_url }}">
+      <strong>See the badges and awards young people can earn</strong>
+      <span>View all badges →</span>
+    </a>
+  </div>
+</section>
+{% endblock main %}

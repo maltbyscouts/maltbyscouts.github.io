@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block title %}Page not found | {{ config.extra.nickname }}{% endblock title %}
+{% block page_header %}{{<page_header title="Page not found" />}}{% endblock page_header %}
+{% block content %}
+<div class="prose">
+  <p>Sorry, we couldn't find that page. It may have moved when we updated our website.</p>
+  <p><a class="btn" href="/">Go to the home page</a> <a class="btn btn--outline" href="/news/">Latest news</a></p>
+</div>
+{% endblock content %}

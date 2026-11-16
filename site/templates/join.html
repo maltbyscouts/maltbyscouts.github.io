@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% block head %}<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>{% endblock head %}
+{% block page_header %}{{<page_header title={section.title} />}}{% endblock page_header %}
+{% block content %}
+<div class="with-sidebar">
+  <div>
+    <div class="prose">{{ section.content | safe }}</div>
+
+    <div class="form-error" role="alert" hidden></div>
+
+    <form class="form" id="join-form" method="post" action="{{ config.extra.forms_endpoint }}/join">
+      <fieldset>
+        <legend>Who is joining? <span class="req">(required)</span></legend>
+        <label class="choice"><input type="radio" name="join_type" value="Young Person" required checked> A young person (aged 4 to 14)</label>
+        <label class="choice"><input type="radio" name="join_type" value="Adult Volunteer"> An adult volunteer (18+)</label>
+      </fieldset>
+
+      <div data-for="Young Person">
+        <label>Young person's full name <span class="req">(required)</span>
+          <input name="young_persons_name" autocomplete="off" maxlength="100" required></label>
+        <label>Parent or carer's full name <span class="req">(required)</span>
+          <input name="parent_name" autocomplete="name" maxlength="100" required></label>
+      </div>
+
+      <div data-for="Adult Volunteer">
+        <label>Your full name <span class="req">(required)</span>
+          <input name="adults_name" autocomplete="name" maxlength="100"></label>
+      </div>
+
+      <label><span data-for="Young Person">Young person's date of birth</span><span data-for="Adult Volunteer">Your date of birth</span> <span class="req">(required)</span>
+        <input type="date" name="date_of_birth" required min="1920-01-01"></label>
+
+      <div class="row">
+        <label>Email address <span class="req">(required)</span>
+          <input type="email" name="email_address" autocomplete="email" maxlength="200" required></label>
+        <label>Telephone number <span class="req">(required)</span>
+          <input type="tel" name="telephone_number" autocomplete="tel" maxlength="30" required></label>
+      </div>
+
+      <fieldset>
+        <legend>Address</legend>
+        <label>Address line 1 <span class="req">(required)</span>
+          <input name="address_1" autocomplete="address-line1" maxlength="200" required></label>
+        <label>Address line 2
+          <input name="address_2" autocomplete="address-line2" maxlength="200"></label>
+        <div class="row">
+          <label>Town or city <span class="req">(required)</span>
+            <input name="city" autocomplete="address-level2" maxlength="100" required></label>
+          <label>Postcode <span class="req">(required)</span>
+            <input name="post_code" autocomplete="postal-code" maxlength="10" required></label>
+        </div>
+        <input type="hidden" name="country" value="United Kingdom">
+      </fieldset>
+
+      <fieldset data-for="Adult Volunteer">
+        <legend>What would you be interested in helping with?</legend>
+        <label class="choice"><input type="checkbox" name="volunteer_interest" value="Becoming a Leader"> Becoming a leader</label>
+        <label class="choice"><input type="checkbox" name="volunteer_interest" value="Support Roles"> Support roles (e.g. trustee, treasurer, helping behind the scenes)</label>
+        <label class="choice"><input type="checkbox" name="volunteer_interest" value="Skills Specialist Roles"> Sharing a skill or specialism</label>
+      </fieldset>
+
+      <fieldset data-for="Young Person">
+        <legend>Would a parent or carer be interested in volunteering?</legend>
+        <label class="choice"><input type="checkbox" name="parent_volunteer" value="Yes"> Yes, tell me more about helping out</label>
+      </fieldset>
+
+      <label class="choice consent"><input type="checkbox" name="consent" value="yes" required>
+        <span>I agree to {{ config.extra.group_name }} Scout Group storing these details to manage this enquiry, as described in our <a href="/privacy-policy/">privacy policy</a>. <span class="req">(required)</span></span></label>
+
+      {# Honeypot: hidden from people, bots tend to fill it in. #}
+      <label class="hp" aria-hidden="true">Leave this empty <input name="website" tabindex="-1" autocomplete="off"></label>
+
+      <div class="cf-turnstile" data-sitekey="{{ config.extra.turnstile_site_key }}"></div>
+      <button class="btn" type="submit">Send</button>
+    </form>
+  </div>
+  <aside class="sidebar">
+    <div class="panel">
+      <h2>What happens next?</h2>
+      <p>Your details go onto our waiting list and a leader will be in touch when a place becomes available.</p>
+      <p>Interested in helping out? <a href="/join/adult-volunteers/">Find out about volunteering</a>.</p>
+    </div>
+  </aside>
+</div>
+{% endblock content %}
+{% block scripts %}{% include "partials/form-script.html" %}{% endblock scripts %}

@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block page_header %}{{<page_header title={page.title} />}}{% endblock page_header %}
+{% block content %}
+<article class="prose">
+  {{ page.content | safe }}
+</article>
+{% if page.extra.members %}
+<section class="team">
+  <h2>Meet the team</h2>
+  <p>All of our leaders are volunteers. Want to get in touch with one of us? Use the <a href="/contact/">contact form</a>.</p>
+  <ul class="team-grid">
+    {% for p in page.extra.members %}
+    <li class="member">
+      <strong>{{ p.name }}</strong>
+      <span>{{ p.role }}</span>
+    </li>
+    {% endfor %}
+  </ul>
+</section>
+{% endif %}
+{% endblock content %}

@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  {%- set page_title = config.title -%}
+  {%- if page and page.title %}{% set page_title = page.title ~ " | " ~ config.extra.nickname %}
+  {%- elif section and section.title and section.path != "/" %}{% set page_title = section.title ~ " | " ~ config.extra.nickname %}{% endif %}
+  <title>{% block title %}{{ page_title }}{% endblock title %}</title>
+  {%- set desc = config.description -%}
+  {%- if page and page.description %}{% set desc = page.description %}{% elif section and section.description %}{% set desc = section.description %}{% endif %}
+  <meta name="description" content="{{ desc | striptags | truncate(length=160) }}">
+  <meta property="og:title" content="{{ page_title }}">
+  <meta property="og:description" content="{{ desc | striptags | truncate(length=200) }}">
+  <meta property="og:url" content="{{ current_url or config.base_url }}">
+  {%- if page and page.extra.image %}
+  <meta property="og:image" content="{{ get_url(path=page.extra.image) }}">
+  {%- else %}
+  <meta property="og:image" content="{{ get_url(path='images/brand/hero.jpg') }}">
+  {%- endif %}
+  <link rel="canonical" href="{{ current_url or config.base_url }}">
+  <link rel="alternate" type="application/atom+xml" title="News" href="{{ get_url(path='atom.xml') }}">
+  <link rel="icon" href="{{ get_url(path='favicon.svg') }}" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;600;700;800;900&display=swap">
+  <link rel="stylesheet" href="{{ get_url(path='style.css', cachebust=true) }}">
+  {% block head %}{% endblock head %}
+</head>
+<body class="{% block body_class %}{% endblock body_class %}">
+<a class="skip" href="#main">Skip to content</a>
+
+<div class="topbar">
+  <div class="wrap">
+    <a href="{{ config.extra.district_url }}">District website</a>
+    <a href="{{ config.extra.county_url }}">County website</a>
+  </div>
+</div>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="{{ get_url(path='/') }}">
+      <img src="{{ get_url(path='images/brand/scouts-logo-standard.svg') }}" alt="Scouts" width="160" height="45">
+      <span class="brand__group">{{ config.extra.group_name }}</span>
+    </a>
+    <button class="nav-toggle" aria-expanded="false" aria-controls="site-nav">
+      <span class="visually-hidden">Menu</span><span></span><span></span><span></span>
+    </button>
+    <nav id="site-nav" class="site-nav" aria-label="Main">
+      <ul>
+        {%- for item in config.extra.menu %}
+        {%- set active = current_path and (current_path == item.url or (item.url != "/" and current_path is starting_with(pat=item.url))) %}
+        <li class="{% if item.children %}has-children{% endif %}{% if active %} active{% endif %}">
+          <a href="{{ item.url }}"{% if active %} aria-current="page"{% endif %}>{{ item.name }}</a>
+          {%- if item.children %}
+          <ul>
+            {%- for c in item.children %}<li><a href="{{ c.url }}">{{ c.name }}</a></li>{% endfor %}
+          </ul>
+          {%- endif %}
+        </li>
+        {%- endfor %}
+      </ul>
+      <a class="btn btn--join" href="/join/">Join Scouts</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+{% block main %}
+  {% block page_header %}{% endblock page_header %}
+  <div class="wrap content-wrap">
+    {% block content %}{% endblock content %}
+  </div>
+{% endblock main %}
+</main>
+
+<footer class="site-footer">
+  <div class="wrap footer-grid">
+    <div>
+      <h2>Useful links</h2>
+      <ul>
+        <li><a href="/join/">Join Scouting</a></li>
+        <li><a href="/about-us/">About Us</a></li>
+        <li><a href="/youth-programme/">Youth Programme</a></li>
+        <li><a href="/news/">News</a></li>
+        <li><a href="/contact/">Contact</a></li>
+      </ul>
+    </div>
+    <div>
+      <h2>More info</h2>
+      <ul>
+        <li><a href="/privacy-policy/">Privacy Policy</a></li>
+        <li><a href="/cookies/">Cookies</a></li>
+        <li><a href="/our-constitution/">Our Constitution</a></li>
+        <li><a href="/code-of-conduct/">Code of Conduct</a></li>
+      </ul>
+    </div>
+    <div>
+      <h2>Follow us</h2>
+      <ul>
+        <li><a href="{{ config.extra.facebook }}">Facebook</a></li>
+        <li><a href="{{ config.extra.youtube }}">YouTube</a></li>
+      </ul>
+    </div>
+    <div>
+      <h2>Find us</h2>
+      <address>
+        {{ config.extra.group_name }} Scout Group<br>
+        {{ config.extra.address | join(sep="<br>") | safe }}
+      </address>
+      <p><a href="/contact/">Contact us</a></p>
+    </div>
+  </div>
+  <div class="wrap footer-legal">
+    <p>© {{ now() | date(format="%Y") }} {{ config.extra.group_name }} Scout Group. Registered charity number: {{ config.extra.charity_number }}.</p>
+  </div>
+</footer>
+
+<script>
+  // Mobile menu toggle (the menu is fully usable without JS on wide screens).
+  (function () {
+    var b = document.querySelector('.nav-toggle'), n = document.getElementById('site-nav');
+    if (!b || !n) return;
+    b.addEventListener('click', function () {
+      var open = b.getAttribute('aria-expanded') === 'true';
+      b.setAttribute('aria-expanded', String(!open));
+      n.classList.toggle('open', !open);
+    });
+  })();
+</script>
+{% block scripts %}{% endblock scripts %}
+</body>
+</html>

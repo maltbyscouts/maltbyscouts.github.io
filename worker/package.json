@@ -1,0 +1,16 @@
+{
+  "name": "maltbyscouts-forms",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "test": "node --test test/"
+  },
+  "devDependencies": {
+    "wrangler": "^4.163.0"
+  },
+  "allowScripts": {
+    "workerd@1.20261116.1": true
+  }
+}

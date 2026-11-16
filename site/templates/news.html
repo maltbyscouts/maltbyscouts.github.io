@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block page_header %}{{<page_header title={section.title} kicker="What we've been up to" />}}{% endblock page_header %}
+{% block content %}
+{% set tags = get_taxonomy(kind="news_tag") %}
+{% if tags.items %}
+<nav class="tag-filter" aria-label="Filter by section">
+  <a class="active" href="/news/">All</a>
+  {% for t in tags.items %}<a href="{{ t.permalink | safe }}">{{ t.name }}</a>{% endfor %}
+</nav>
+{% endif %}
+<div class="card-grid">
+  {% for p in paginator.pages %}{{<news_card p={p} />}}{% endfor %}
+</div>
+{{<pagination paginator={paginator} />}}
+{% endblock content %}

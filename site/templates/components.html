@@ -1,0 +1,48 @@
+{# Reusable components (Tera 2). Registered globally: call as {{<name arg={value} />}} with no import. #}
+
+{% component thumb(path, alt="", w=600, h=400) %}
+  {%- if path %}
+    {%- set p = path | trim_start(pat="/") -%}
+    {%- set meta = get_image_metadata(path=p, allow_missing=true) -%}
+    {%- if meta and meta.format != "svg" -%}
+      {%- set img = resize_image(path=p, width=w, height=h, op="fill", format="webp", quality=75) -%}
+      <img src="{{ img.url }}" alt="{{ alt }}" width="{{ img.width }}" height="{{ img.height }}" loading="lazy">
+    {%- elif meta -%}
+      <img src="/{{ p }}" alt="{{ alt }}" loading="lazy">
+    {%- endif -%}
+  {%- endif %}
+{% endcomponent thumb %}
+
+{% component news_card(p) %}
+<a class="card" href="{{ p.permalink | safe }}">
+  <div class="card__media">
+    {%- if p.extra.image %}{{<thumb path={p.extra.image} />}}{% else %}<img src="/images/brand/scouts-logo-standard.svg" alt="" class="card__placeholder">{% endif -%}
+  </div>
+  <div class="card__body">
+    <time datetime="{{ p.date }}">{{ p.date | date(format="%-d %b %Y") }}</time>
+    <h3>{{ p.title }}</h3>
+    {%- if p.taxonomies.news_tag %}
+    <ul class="tags">{% for t in p.taxonomies.news_tag %}<li>{{ t }}</li>{% endfor %}</ul>
+    {%- endif %}
+  </div>
+</a>
+{% endcomponent news_card %}
+
+{% component page_header(title, kicker="") %}
+<header class="page-header">
+  <div class="wrap">
+    {% if kicker %}<p class="kicker">{{ kicker }}</p>{% endif %}
+    <h1>{{ title }}</h1>
+  </div>
+</header>
+{% endcomponent page_header %}
+
+{% component pagination(paginator) %}
+{% if paginator and paginator.number_pagers > 1 %}
+<nav class="pagination" aria-label="Pages">
+  {% if paginator.previous %}<a class="btn btn--outline" href="{{ paginator.previous }}">← Newer</a>{% endif %}
+  <span>Page {{ paginator.current_index }} of {{ paginator.number_pagers }}</span>
+  {% if paginator.next %}<a class="btn btn--outline" href="{{ paginator.next }}">Older →</a>{% endif %}
+</nav>
+{% endif %}
+{% endcomponent pagination %}

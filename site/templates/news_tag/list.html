@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block page_header %}{{<page_header title="News by section" />}}{% endblock page_header %}
+{% block content %}
+<nav class="tag-filter tag-filter--big" aria-label="Sections">
+  <a href="/news/">All news</a>
+  {% for t in terms %}<a href="{{ t.permalink | safe }}">{{ t.name }} ({{ t.pages | length }})</a>{% endfor %}
+</nav>
+{% endblock content %}

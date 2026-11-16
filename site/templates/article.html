@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block page_header %}
+<header class="page-header page-header--article">
+  <div class="wrap">
+    <p class="kicker"><a href="/news/">News</a></p>
+    <h1>{{ page.title }}</h1>
+    <p class="meta">
+      <time datetime="{{ page.date }}">{{ page.date | date(format="%-d %B %Y") }}</time>
+      {%- if page.extra.author %} · {{ page.extra.author }}{% endif %}
+    </p>
+    {%- if page.taxonomies.news_tag %}
+    <ul class="tags">{% for t in page.taxonomies.news_tag %}<li><a href="{{ get_taxonomy_url(kind="news_tag", term=t) | safe }}">{{ t }}</a></li>{% endfor %}</ul>
+    {%- endif %}
+  </div>
+</header>
+{% endblock page_header %}
+{% block content %}
+<div class="with-sidebar">
+  <article class="prose">
+    {{ page.content | safe }}
+    <p class="share">Share this: <a href="https://www.facebook.com/sharer.php?u={{ page.permalink | urlencode_strict }}">Facebook</a></p>
+  </article>
+  <aside class="sidebar">
+    <div class="panel panel--join">
+      <h2>Ready to start the adventure?</h2>
+      <a class="btn" href="/join/">Join now</a>
+    </div>
+    {% set news = get_section(path="news/_index.md") %}
+    <div class="panel">
+      <h2>Latest news</h2>
+      <ul class="latest">
+        {% for p in news.pages[:4] %}{% if p.path != page.path %}
+        <li><a href="{{ p.permalink | safe }}">{{ p.title }}</a><time datetime="{{ p.date }}">{{ p.date | date(format="%-d %b %Y") }}</time></li>
+        {% endif %}{% endfor %}
+      </ul>
+    </div>
+  </aside>
+</div>
+{% endblock content %}
