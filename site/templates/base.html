@@ -18,6 +18,9 @@
   {%- else %}
   <meta property="og:image" content="{{ get_url(path='images/brand/hero.jpg') }}">
   {%- endif %}
+  {%- if config.base_url is not starting_with(pat="https://www.maltbyscouts.org") %}
+  <meta name="robots" content="noindex">{# preview build (e.g. github.io before the DNS switch) #}
+  {%- endif %}
   <link rel="canonical" href="{{ current_url or config.base_url }}">
   <link rel="alternate" type="application/atom+xml" title="News" href="{{ get_url(path='atom.xml') }}">
   <link rel="icon" href="{{ get_url(path='favicon.svg') }}" type="image/svg+xml">

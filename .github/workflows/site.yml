@@ -15,6 +15,9 @@ concurrency:
 
 env:
   ZOLA_VERSION: "0.23.6"
+  # Where the site is served. Change to https://www.maltbyscouts.org when DNS is switched over
+  # (and set the custom domain in Settings -> Pages). Until then the preview is marked noindex.
+  SITE_URL: "https://maltbyscouts.github.io"
 
 jobs:
   build:
@@ -34,7 +37,7 @@ jobs:
 
       - name: Build
         working-directory: site
-        run: zola build
+        run: zola build --base-url "$SITE_URL"
 
       - name: Check internal links
         working-directory: site
